@@ -228,7 +228,6 @@
         # Emit the cloud config ready event
         # this can be used by upstart jobs for 'start on cloud-config'.
         cloud_config_modules:
-        - emit_upstart
         - ssh-import-id
         - ntp
         - timezone
