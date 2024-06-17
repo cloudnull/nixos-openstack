@@ -1,7 +1,7 @@
 {
   description = "NixOS OpenStack image build configuration";
   inputs =  {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
   };
   outputs = { self, nixpkgs }: {
     nixosConfigurations = {

@@ -10,7 +10,7 @@ This repository is a flake which will result in NixOS packaged up in a QCOW2 ima
 * Q35 machine type (compatible)
 * QEMU aware
 * virtio support
-* Latest stable NixOS 23.11
+* Latest stable NixOS 24.05
 * Latest Kernel Image (6.8+)
 * Cloud-Init enabled
 * Standalone system
@@ -75,8 +75,8 @@ openstack --os-cloud default image create \
           --property os_type=linux \
           --property os_admin_user=nixos \
           --property os_distro=nixos \
-          --property os_version=23.11 \
-          nixos-23.11
+          --property os_version=24.05 \
+          nixos-24.05
 ```
 
 This image will set the required metadata within the image properties to run the system with the desired feature set described in the "Image Requirements" section. The image output will look similar to this.
@@ -92,10 +92,10 @@ This image will set the required metadata within the image properties to run the
 | id               | f73588c5-468e-4678-9974-33300dce7c39                                                                                                                                                                                    |
 | min_disk         | 0                                                                                                                                                                                                                       |
 | min_ram          | 0                                                                                                                                                                                                                       |
-| name             | nixos-23.11                                                                                                                                                                                                             |
+| name             | nixos-24.05                                                                                                                                                                                                             |
 | owner            | 4d04429679c44b9ab3cafd523b9f86fd                                                                                                                                                                                        |
 | properties       | hw_disk_bus='scsi', hw_firmware_type='uefi', hw_machine_type='q35', hw_qemu_guest_agent='yes', hw_scsi_model='virtio-scsi', hw_vif_multiqueue_enabled='True', hypervisor_type='kvm', img_config_drive='optional',       |
-|                  | os_admin_user='nixos', os_distro='nixos', os_hidden='False', os_require_quiesce='True', os_type='linux', os_version='23.11', owner_specified.openstack.md5='', owner_specified.openstack.object='images/nixos-23.11',   |
+|                  | os_admin_user='nixos', os_distro='nixos', os_hidden='False', os_require_quiesce='True', os_type='linux', os_version='24.05', owner_specified.openstack.md5='', owner_specified.openstack.object='images/nixos-24.05',   |
 |                  | owner_specified.openstack.sha256=''                                                                                                                                                                                     |
 | protected        | False                                                                                                                                                                                                                   |
 | schema           | /v2/schemas/image                                                                                                                                                                                                       |
@@ -113,11 +113,11 @@ This image will set the required metadata within the image properties to run the
 ``` shell
 # note the nic, flavor, and key-name will all be unique for your environment.
 openstack --os-cloud default server create \
-          --image nixos-23.11 \
+          --image nixos-24.05 \
           --nic net-id=flat \
           --flavor m1.small \
           --key-name controller-0 \
-          nixos-23.11
+          nixos-24.05
 ```
 
 The server creation will look something similar to this
@@ -145,9 +145,9 @@ The server creation will look something similar to this
 | flavor                              | m1.small (4ef01fb8-6afa-46f8-b20f-86cf60388791)          |
 | hostId                              | afb64fd7a445a42c4dee560085e4dc4db3751f923ecd76f98b21c36e |
 | id                                  | d212be0d-3ed0-4096-b763-b08a96fd575e                     |
-| image                               | nixos-23.11 (f73588c5-468e-4678-9974-33300dce7c39)       |
+| image                               | nixos-24.05 (f73588c5-468e-4678-9974-33300dce7c39)       |
 | key_name                            | controller-0                                             |
-| name                                | nixos-23.11                                              |
+| name                                | nixos-24.05                                              |
 | progress                            | 0                                                        |
 | project_id                          | 4d04429679c44b9ab3cafd523b9f86fd                         |
 | properties                          |                                                          |
