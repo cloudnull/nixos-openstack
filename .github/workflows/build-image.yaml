@@ -1,0 +1,33 @@
+name: Build Image and Release
+permissions:
+  contents: write
+on:
+  push:
+    branches:
+      - main
+jobs:
+  nixos-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Dynamically set MY_DATE environment variable
+      run: echo "MY_DATE=$(date +%Y.%m.%d-%H%M)" >> $GITHUB_ENV
+    - name: Install Nix package manager
+      run: curl -L https://nixos.org/nix/install | sh -s -- --daemon
+    - name: Run NixOS Check build
+      run: /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes flake check
+    - name: Run NixOS build
+      run: /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes build .#nixosConfigurations.build-qcow2.config.system.build.qcow2
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "result/nixos.qcow2,flake.lock"
+        makeLatest: true
+        generateReleaseNotes: true
+        artifactErrorsFailBuild: true
+        name: "${{ env.MY_DATE }}"
+        tag: "${{ env.MY_DATE }}"
+        body: |
+          This is the latest build from ${{ env.MY_DATE }}

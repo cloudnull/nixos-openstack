@@ -1,6 +1,6 @@
 # Cloudy NixOS for OpenStack
 
-This repository is a flake which will result in NixOS packaged up in a QCOW2 image which is compatible with virtualization platforms, like OpenStack.
+This repository is a flake which will result in NixOS packaged up in a QCOW2 image which is compatible with virtualization platforms, like OpenStack. However you can also download the latest image built using this repository from the [releases](https://github.com/cloudnull/nixos-openstack/releases/latest) page.
 
 > The following repo assumes you have `flakes` and `nix-command` on your system.
 
