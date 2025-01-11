@@ -56,7 +56,7 @@
     };
   };
   system = {
-    stateVersion = "24.05";
+    stateVersion = "24.11";
     userActivationScripts = {
       zshrc = "touch .zshrc";
     };
