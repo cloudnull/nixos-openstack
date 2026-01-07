@@ -3,6 +3,11 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   nix = {
+    nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "nixos-config=/etc/nixos/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
