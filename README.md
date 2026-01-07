@@ -170,14 +170,14 @@ The server creation will look something similar to this
 | OS-EXT-STS:power_state              | Running                                                  |
 | OS-EXT-STS:task_state               | None                                                     |
 | OS-EXT-STS:vm_state                 | active                                                   |
-| OS-SRV-USG:launched_at              | 2024-04-06T18:32:18.000000                               |
+| OS-SRV-USG:launched_at              | 2026-01-07T18:32:18.000000                               |
 | OS-SRV-USG:terminated_at            | None                                                     |
 | accessIPv4                          |                                                          |
 | accessIPv6                          |                                                          |
 | addresses                           | flat=172.16.25.163                                       |
 | adminPass                           | ************                                             |
 | config_drive                        |                                                          |
-| created                             | 2024-04-06T18:32:09Z                                     |
+| created                             | 2026-01-07T18:32:09Z                                     |
 | flavor                              | m1.small (4ef01fb8-6afa-46f8-b20f-86cf60388791)          |
 | hostId                              | afb64fd7a445a42c4dee560085e4dc4db3751f923ecd76f98b21c36e |
 | id                                  | d212be0d-3ed0-4096-b763-b08a96fd575e                     |
@@ -189,7 +189,7 @@ The server creation will look something similar to this
 | properties                          |                                                          |
 | security_groups                     | name='default'                                           |
 | status                              | ACTIVE                                                   |
-| updated                             | 2024-04-06T18:32:18Z                                     |
+| updated                             | 2026-01-07T18:32:18Z                                     |
 | user_id                             | 236cbdbe0eb545d68a21c58cb782c924                         |
 | volumes_attached                    |                                                          |
 +-------------------------------------+----------------------------------------------------------+
@@ -198,6 +198,22 @@ The server creation will look something similar to this
 After boot all of the cloud init bits will run and we'll be able to login with our defined keypair.
 
 ![Web Console](assets/console.png)
+
+## Managing the Running Instance
+
+This image is flake-based. If you need to manually trigger a rebuild, use:
+
+``` shell
+nixos-rebuild-flake
+```
+
+Which is a convience alias for running the following command.
+
+``` shell
+sudo nixos-rebuild switch --flake github:cloudnull/nixos-openstack
+```
+
+Note: Running `nixos-rebuild switch` without the `--flake` argument will fail since the traditional `/etc/nixos/configuration.nix` file is minimal and only imports the flake configuration.
 
 ## Using as a Module
 

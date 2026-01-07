@@ -70,6 +70,7 @@
     syntaxHighlighting.enable = true;
     shellAliases = {
       ll = "ls -l";
+      nixos-rebuild-flake = "sudo nixos-rebuild switch --flake github:cloudnull/nixos-openstack";
     };
   };
 
