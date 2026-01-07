@@ -4,6 +4,22 @@ This repository is a flake which will result in NixOS packaged up in a QCOW2 ima
 
 > The following repo assumes you have `flakes` and `nix-command` on your system.
 
+### Non-NixOS Systems
+
+If you're building on a non-NixOS system with the Nix package manager installed, you may encounter a build error like:
+
+```
+a 'x86_64-linux' with features {kvm} is required to build
+```
+
+To resolve this, add `kvm` to your system features in `/etc/nix/nix.conf`:
+
+```
+system-features = nixos-test benchmark big-parallel kvm
+```
+
+After updating the configuration, restart the Nix daemon for the changes to take effect.
+
 ## Project Structure
 
 ```

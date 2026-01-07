@@ -11,11 +11,11 @@
 
   fileSystems = {
     "/boot" = {
-      label = "esp";
+      device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
+      options = [ "nofail" "x-systemd.device-timeout=5s" ];
     };
     "/" = {
-      label = "nixos";
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
       fsType = "ext4";
