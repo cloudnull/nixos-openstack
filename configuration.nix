@@ -2,6 +2,7 @@
   imports = [
     "${toString modulesPath}/profiles/qemu-guest.nix"
   ];
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   nix = {
     settings = {
       auto-optimise-store = true;
