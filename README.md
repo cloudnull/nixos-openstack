@@ -201,19 +201,23 @@ After boot all of the cloud init bits will run and we'll be able to login with o
 
 ## Managing the Running Instance
 
-This image is flake-based. If you need to manually trigger a rebuild, use:
+This image includes a complete `/etc/nixos/configuration.nix` file, so you can manage it like any traditional NixOS system:
+
+``` shell
+sudo nixos-rebuild switch
+```
+
+You can edit `/etc/nixos/configuration.nix` directly to customize your instance. The configuration is self-contained and includes all the OpenStack/QEMU optimizations.
+
+To update from the upstream flake instead (pulling latest changes from GitHub):
 
 ``` shell
 nixos-rebuild-flake
-```
-
-Which is a convience alias for running the following command.
-
-``` shell
+# Or explicitly:
 sudo nixos-rebuild switch --flake github:cloudnull/nixos-openstack
 ```
 
-Note: Running `nixos-rebuild switch` without the `--flake` argument will fail since the traditional `/etc/nixos/configuration.nix` file is minimal and only imports the flake configuration.
+The system also has automatic upgrades enabled by default, which will periodically pull updates from the GitHub repository.
 
 ## Using as a Module
 
