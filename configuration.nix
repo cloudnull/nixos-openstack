@@ -10,7 +10,6 @@
   fileSystems = {
     "/boot" = {
       label = "esp";
-      device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
     "/" = {

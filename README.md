@@ -159,7 +159,7 @@ The server creation will look something similar to this
 +-------------------------------------+----------------------------------------------------------+
 ```
 
-After boot all of the cloud init bits will run and we'll be abel to login with our defined keypair.
+After boot all of the cloud init bits will run and we'll be able to login with our defined keypair.
 
 ![Web Console](assets/console.png)
 
