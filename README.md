@@ -4,13 +4,27 @@ This repository is a flake which will result in NixOS packaged up in a QCOW2 ima
 
 > The following repo assumes you have `flakes` and `nix-command` on your system.
 
+## Project Structure
+
+```
+nixos-openstack/
+├── flake.nix              # Flake definition with outputs
+├── configuration.nix      # Main entry point (imports modules)
+├── modules/
+│   ├── base.nix           # Core system config (boot, users, packages)
+│   ├── cloud-init.nix     # Cloud-init service configuration
+│   └── openstack.nix      # OpenStack/QEMU guest settings
+└── formats/
+    └── qcow2.nix          # QCOW2 image format builder
+```
+
 ## Image Requirements
 
 * UEFI boot
 * Q35 machine type (compatible)
 * QEMU aware
 * virtio support
-* Latest stable NixOS 24.11
+* Latest stable NixOS 25.11
 * Latest Kernel Image (6.8+)
 * Cloud-Init enabled
 * Standalone system
@@ -20,7 +34,7 @@ This repository is a flake which will result in NixOS packaged up in a QCOW2 ima
 You don't have to clone this repo to build with it. The following command could be used to create your image from source online.
 
 ``` shell
-nix build git+https://github.com/cloudnull/nixos-openstack#nixosConfigurations.build-qcow2.config.system.build.qcow2
+nix build git+https://github.com/cloudnull/nixos-openstack
 ```
 
 ## Running local build
@@ -38,6 +52,12 @@ nix flake check
 ### Create an OpenStack compatible image for NixOS
 
 Run the build, this can take a few minutes.
+
+``` shell
+nix build
+```
+
+You can also use the explicit path if preferred:
 
 ``` shell
 nix build .#nixosConfigurations.build-qcow2.config.system.build.qcow2
@@ -75,8 +95,8 @@ openstack --os-cloud default image create \
           --property os_type=linux \
           --property os_admin_user=nixos \
           --property os_distro=nixos \
-          --property os_version=24.11 \
-          nixos-24.11
+          --property os_version=25.11 \
+          nixos-25.11
 ```
 
 This image will set the required metadata within the image properties to run the system with the desired feature set described in the "Image Requirements" section. The image output will look similar to this.
@@ -92,10 +112,10 @@ This image will set the required metadata within the image properties to run the
 | id               | f73588c5-468e-4678-9974-33300dce7c39                                                                                                                                                                                    |
 | min_disk         | 0                                                                                                                                                                                                                       |
 | min_ram          | 0                                                                                                                                                                                                                       |
-| name             | nixos-24.11                                                                                                                                                                                                             |
+| name             | nixos-25.11                                                                                                                                                                                                             |
 | owner            | 4d04429679c44b9ab3cafd523b9f86fd                                                                                                                                                                                        |
 | properties       | hw_disk_bus='scsi', hw_firmware_type='uefi', hw_machine_type='q35', hw_qemu_guest_agent='yes', hw_scsi_model='virtio-scsi', hw_vif_multiqueue_enabled='True', hypervisor_type='kvm', img_config_drive='optional',       |
-|                  | os_admin_user='nixos', os_distro='nixos', os_hidden='False', os_require_quiesce='True', os_type='linux', os_version='24.11', owner_specified.openstack.md5='', owner_specified.openstack.object='images/nixos-24.11',   |
+|                  | os_admin_user='nixos', os_distro='nixos', os_hidden='False', os_require_quiesce='True', os_type='linux', os_version='25.11', owner_specified.openstack.md5='', owner_specified.openstack.object='images/nixos-25.11',   |
 |                  | owner_specified.openstack.sha256=''                                                                                                                                                                                     |
 | protected        | False                                                                                                                                                                                                                   |
 | schema           | /v2/schemas/image                                                                                                                                                                                                       |
@@ -113,11 +133,11 @@ This image will set the required metadata within the image properties to run the
 ``` shell
 # note the nic, flavor, and key-name will all be unique for your environment.
 openstack --os-cloud default server create \
-          --image nixos-24.11 \
+          --image nixos-25.11 \
           --nic net-id=flat \
           --flavor m1.small \
           --key-name controller-0 \
-          nixos-24.11
+          nixos-25.11
 ```
 
 The server creation will look something similar to this
@@ -145,9 +165,9 @@ The server creation will look something similar to this
 | flavor                              | m1.small (4ef01fb8-6afa-46f8-b20f-86cf60388791)          |
 | hostId                              | afb64fd7a445a42c4dee560085e4dc4db3751f923ecd76f98b21c36e |
 | id                                  | d212be0d-3ed0-4096-b763-b08a96fd575e                     |
-| image                               | nixos-24.11 (f73588c5-468e-4678-9974-33300dce7c39)       |
+| image                               | nixos-25.11 (f73588c5-468e-4678-9974-33300dce7c39)       |
 | key_name                            | controller-0                                             |
-| name                                | nixos-24.11                                              |
+| name                                | nixos-25.11                                              |
 | progress                            | 0                                                        |
 | project_id                          | 4d04429679c44b9ab3cafd523b9f86fd                         |
 | properties                          |                                                          |
@@ -162,6 +182,37 @@ The server creation will look something similar to this
 After boot all of the cloud init bits will run and we'll be able to login with our defined keypair.
 
 ![Web Console](assets/console.png)
+
+## Using as a Module
+
+You can import this configuration as a module in your own flake:
+
+``` nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixos-openstack.url = "github:cloudnull/nixos-openstack";
+  };
+
+  outputs = { self, nixpkgs, nixos-openstack }: {
+    nixosConfigurations.my-server = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        nixos-openstack.nixosModules.default
+        # Your additional configuration here
+      ];
+    };
+  };
+}
+```
+
+## Development
+
+Format nix files using the configured formatter:
+
+``` shell
+nix fmt
+```
 
 ## Hope this helps someone
 
